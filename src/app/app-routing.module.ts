@@ -1,7 +1,13 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-const routes: Routes = [];
+import { VoiceCallComponent } from './voice-call/voice-call.component';
+
+
+const routes: Routes = [
+  { path: 'agora', component: VoiceCallComponent },
+
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

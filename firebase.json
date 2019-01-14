@@ -1,0 +1,21 @@
+{
+  "hosting": {
+    "public": "dist/agora-test",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/src/*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "/public/**/*",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
