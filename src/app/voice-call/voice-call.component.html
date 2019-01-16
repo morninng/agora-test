@@ -5,4 +5,32 @@
 
 <button (click)="join_room_a()">join_room_a</button>
 
-ss
+<button (click)="create_stream()">create_stream</button>
+
+<button (click)="publish_stream()">publish_stream</button>
+
+<button (click)="unpublish_stream()">unpublish_stream</button>
+
+
+
+
+<button (click)="leave_channel()">leave_channel</button>
+
+
+<div id="agora_local"></div>
+
+
+<br><br>
+
+<button (click)="microphone_on()">microphone_on</button>
+<button (click)="microphone_off()">microphone_off</button>
+
+microphone_on
+
+
+
+<ng-container *ngFor="let stream_id of remote_stream_id_arr">
+
+  <span id="{{stream_id}}"></span>
+</ng-container>
+
