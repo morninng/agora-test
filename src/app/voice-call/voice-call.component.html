@@ -2,35 +2,62 @@
   voice-call works!
 </p>
 
+<div style="display:flex">
+  <div style="width:50%">
+    <button (click)="join_room_a()">join_room_a</button>
+    <button (click)="leave_channel()">leave_channel</button>
+    <p>is_joined {{is_joined}}</p>
 
-<button (click)="join_room_a()">join_room_a</button>
+    <br><br>
 
-<button (click)="create_stream()">create_stream</button>
+    <button (click)="create_stream()">create_stream</button>
+    <p> localStreamId {{ localStreamId }}</p>
+    <br><br>
 
-<button (click)="publish_stream()">publish_stream</button>
+    <button (click)="publish_stream()">publish_stream</button>
+    <button (click)="unpublish_stream()">unpublish_stream</button>
+    <p> is_published {{is_published}} </p>
+    <br><br>
 
-<button (click)="unpublish_stream()">unpublish_stream</button>
-
-
-
-
-<button (click)="leave_channel()">leave_channel</button>
-
-
-<div id="agora_local"></div>
-
-
-<br><br>
-
-<button (click)="microphone_on()">microphone_on</button>
-<button (click)="microphone_off()">microphone_off</button>
-
-microphone_on
+    <br><br>
 
 
 
-<ng-container *ngFor="let stream_id of remote_stream_id_arr">
+    <div id="agora_local"></div>
 
-  <span id="{{stream_id}}"></span>
-</ng-container>
 
+    <br><br>
+
+    <button (click)="speaker_on()">speaker_on</button>
+    <button (click)="speaker_off()">speaker_off</button>
+    is_speaker_on: {{is_speaker_on}}
+
+    <br><br>
+
+
+    <button (click)="microphone_on()">microphone_on</button>
+    <button (click)="microphone_off()">microphone_off</button>
+    is_microphone_on: {{is_microphone_on}}
+
+
+  </div>
+  <div style="width:50%">
+
+    <br>
+    <p></p>
+    <br><br><br>
+    subscribed
+    <ng-container *ngFor="let stream_id of remote_stream_subscribed_id_arr">
+
+      <p id="{{stream_id}}"> {{stream_id}} </p>
+      
+    </ng-container>
+
+    <br><br><br>
+    added
+    <ng-container *ngFor="let stream_id of remote_stream_added_id_arr">
+      <p id="{{stream_id}}"> {{stream_id}} </p>
+    </ng-container>
+
+  </div>
+</div>
