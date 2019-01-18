@@ -16,6 +16,14 @@
     "lib": [
       "es2017",
       "dom"
-    ]
+    ],
+    "paths": {
+      "agora-io": [
+        "dist/agora-io"
+      ],
+      "agora-io/*": [
+        "dist/agora-io/*"
+      ]
+    }
   }
 }
