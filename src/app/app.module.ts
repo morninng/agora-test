@@ -5,6 +5,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { VoiceCallComponent } from './voice-call/voice-call.component';
 
+import { AgoraIoModule } from 'agora-io';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -12,7 +14,8 @@ import { VoiceCallComponent } from './voice-call/voice-call.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    AgoraIoModule
   ],
   providers: [],
   bootstrap: [AppComponent]
