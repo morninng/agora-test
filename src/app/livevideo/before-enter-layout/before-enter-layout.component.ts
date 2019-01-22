@@ -1,4 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
+import { AgoraIoService } from 'agora-io';
+import { UserAuthService } from '../../services/user-auth.service';
+
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-before-enter-layout',
@@ -7,9 +13,26 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BeforeEnterLayoutComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private agoraIoService: AgoraIoService,
+    private userAuthService: UserAuthService,
+    private router: Router) { }
 
   ngOnInit() {
+  }
+
+
+  enter_room() {
+    const own_uid = this.userAuthService.get_own_user_id();
+    this.agoraIoService.enter_webrtc_beforeenter(own_uid);
+    this.agoraIoService.monitor_webrtc_enter$()
+    .pipe(
+      take(1)
+    )
+    .subscribe(() => {
+      this.router.navigate(['/livevideo/game/']);
+    });
+
   }
 
 }

@@ -33,7 +33,7 @@ export class VoiceCallComponent implements OnInit, OnDestroy {
 
   start_initialize() {
 
-    this.agoraIoService.initialize();
+    this.agoraIoService.initialize_webrtc();
     return this.agoraIoService.get_initialized_done$()
       .subscribe((initialized: boolean) => {
         this.is_webrtc_initialized = initialized;
@@ -50,23 +50,25 @@ export class VoiceCallComponent implements OnInit, OnDestroy {
       .subscribe( (is_room_joined: boolean) => {
         this.is_room_joined = is_room_joined;
         this.change_ref.detectChanges();
-      } );
-
-
-
+      });
     this.change_ref.detectChanges();
   }
 
   leave_room() {
     this.agoraIoService.leave_room();
   }
-  create_stream = () => {
 
+  create_stream = () => {
 
     const own_uid = this.userAuthService.get_own_user_id();
     this.agoraIoService.create_stream(own_uid);
-
   }
+
+  delete_stream = () => {
+    this.agoraIoService.delete_stream();
+  }
+
+
   get localStreamId() {
     return this.agoraIoService.localStreamId;
   }

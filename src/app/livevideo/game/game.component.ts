@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+
+import { AgoraIoService } from 'agora-io';
+import { UserAuthService } from '../../services/user-auth.service';
+
 
 @Component({
   selector: 'app-game',
@@ -7,9 +11,28 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GameComponent implements OnInit {
 
-  constructor() { }
+  is_room_joined = false;
+
+  constructor(
+    private change_ref: ChangeDetectorRef,
+    private agoraIoService: AgoraIoService,
+    private userAuthService: UserAuthService,
+  ) { }
 
   ngOnInit() {
+
+    const own_uid = this.userAuthService.get_own_user_id();
+
+    this.agoraIoService.join_room('aaa', own_uid);
+    this.agoraIoService.get_is_room_joined()
+      .subscribe( (is_room_joined: boolean) => {
+        this.is_room_joined = is_room_joined;
+        this.change_ref.detectChanges();
+      });
+    this.change_ref.detectChanges();
+
+
+
   }
 
 }

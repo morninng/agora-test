@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 
 import * as AgoraRTC from 'agora-rtc-sdk';
-import { BehaviorSubject, Observable, ReplaySubject } from 'rxjs';
-
+import { BehaviorSubject, Observable, ReplaySubject, combineLatest } from 'rxjs';
+import { map, filter } from 'rxjs/operators';
 
 type AgoraClientCodec = 'vp8' | 'h264';
 type AgoraClientMode = 'live' | 'rtc';
@@ -28,6 +28,15 @@ export class AgoraIoService {
   is_room_joined = false;
   is_room_joined_subject$: ReplaySubject<boolean>;
   is_room_joined_observable$: Observable<boolean>;
+
+
+  is_localstream_created_subject$: ReplaySubject<boolean>;
+  is_localstream_created_observable$: Observable<boolean>;
+
+
+
+
+
 
   _own_uid = null;
   _own_stream_id = null;
@@ -65,23 +74,80 @@ export class AgoraIoService {
     return this.remote_stream_arr_observable$;
   }
 
-
+  get_is_initialized(){
+    return this.is_initialized;
+  }
 
   constructor() {
     // this.initialize();
-    this.remote_stream_arr_subject$ = new BehaviorSubject([]);
+
+   }
+
+   enter_webrtc_beforeenter(own_uid){
+     this.initialize_subject();
+     this.initialize_webrtc();
+     this.create_stream(own_uid);
+   }
+   monitor_webrtc_enter$() {
+
+    return combineLatest(this.is_initialized_observable$, this.is_localstream_created_observable$)
+    .pipe(
+      filter(([is_initialized, is_localstream_created]: [boolean, boolean]) => {
+
+        if (is_initialized && is_localstream_created) {
+          return true;
+        } else {
+          return false;
+        }
+      })
+      // filter((value) => {
+      //   return value;
+      // })
+    );
+   }
+
+
+   initialize_subject() {
+    this.remote_stream_arr_subject$ = this.remote_stream_arr_subject$ || new BehaviorSubject([]);
     this.remote_stream_arr_observable$ = this.remote_stream_arr_subject$.asObservable();
 
     this.is_initialized = false;
-    this.is_initialized_subject$ = new ReplaySubject(0);
+    this.is_initialized_subject$ = this.is_initialized_subject$ || new ReplaySubject(0);
     this.is_initialized_observable$ = this.is_initialized_subject$.asObservable();
 
     this.is_room_joined = false;
-    this.is_room_joined_subject$ = new ReplaySubject(0);
+    this.is_room_joined_subject$ = this.is_room_joined_subject$ || new ReplaySubject(0);
     this.is_room_joined_observable$ = this.is_room_joined_subject$.asObservable();
+
+    this.is_localstream_created_subject$ =  this.is_localstream_created_subject$  || new ReplaySubject(0);
+    this.is_localstream_created_observable$ = this.is_localstream_created_subject$.asObservable();
    }
 
-  initialize() {
+   complete_subject(){
+
+    if(this.remote_stream_arr_subject$){
+      this.remote_stream_arr_subject$.complete();
+      this.remote_stream_arr_subject$ = null;
+      this.remote_stream_arr_observable$ = null;
+    }
+
+    if(this.is_initialized_subject$) {
+      this.is_initialized_subject$.complete();
+      this.is_initialized_subject$ = null;
+      
+    }
+    if(this.is_room_joined_subject$) {
+      this.is_room_joined_subject$.complete();
+      this.is_room_joined_subject$ = null;
+    }
+    if(this.is_localstream_created_subject$) {
+      this.is_localstream_created_subject$.complete();
+      this.is_localstream_created_subject$ = null;
+    }
+   }
+
+
+  initialize_webrtc() {
 
     if (this.is_initialized) {
       return;
@@ -205,7 +271,6 @@ export class AgoraIoService {
       this.is_initialized = true;
       this.is_initialized_subject$.next(true);
 
-
     }, (err) => {
       console.log('----AgoraRTC client init failed', err);
       this.is_initialized = false;
@@ -285,16 +350,23 @@ export class AgoraIoService {
 
     this._localStream.init(
       () => {
+        this.is_localstream_created_subject$.next(true);
         console.log('----getUserMedia successfully');
       },
       (err) => {
+        this.is_localstream_created_subject$.next(false);
         console.log('----getUserMedia failed', err);
       }
     );
   }
 
+  delete_stream() {
 
-
+    if(this._localStream){
+      this._localStream.stop();
+      this._localStream = null;
+    }
+  }
 
 
 
@@ -331,13 +403,11 @@ export class AgoraIoService {
       return;
     }
     this._client.leave(() => {
-      // this._is_joined = false;
       this.is_room_joined = false;
       this.is_room_joined_subject$.next(false);
 
     },
     () => {
-      // this._is_joined = true;
     });
   }
 
@@ -407,9 +477,9 @@ export class AgoraIoService {
 
 
   finalize() {
-    if (this._localStream ) {
-      this._localStream.close();
-    }
+    this.leave_room();
+    this.delete_stream();
+
   }
 
 

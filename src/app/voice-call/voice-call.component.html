@@ -6,9 +6,14 @@
   <div style="width:50%">
     <p>own_uid: {{own_uid}}</p>
 
-    <button (click)="start_initialize()">start_initialize</button>
-    
-    <button (click)="create_stream()">create_stream</button>
+    <p>
+      <button (click)="start_initialize()">start_initialize</button>
+    </p>
+
+    <p>
+      <button (click)="create_stream()">create_stream</button>
+      <button (click)="delete_stream()">delete_stream</button>
+    </p>
     <p> localStreamId {{ localStreamId }}</p>
     <br><br>
 
