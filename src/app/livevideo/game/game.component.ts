@@ -12,6 +12,7 @@ import { UserAuthService } from '../../services/user-auth.service';
 export class GameComponent implements OnInit {
 
   is_room_joined = false;
+  own_uid = null;
 
   constructor(
     private change_ref: ChangeDetectorRef,
@@ -21,9 +22,9 @@ export class GameComponent implements OnInit {
 
   ngOnInit() {
 
-    const own_uid = this.userAuthService.get_own_user_id();
+    this.own_uid = this.userAuthService.get_own_user_id();
 
-    this.agoraIoService.join_room('aaa', own_uid);
+    this.agoraIoService.join_room('aaa', this.own_uid);
     this.agoraIoService.get_is_room_joined()
       .subscribe( (is_room_joined: boolean) => {
         this.is_room_joined = is_room_joined;

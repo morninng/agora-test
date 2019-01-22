@@ -58,7 +58,7 @@ export class AgoraIoService {
   }
 
 
-  get is_published(): boolean {
+  get_is_published(): boolean {
     return this._is_published;
   }
 

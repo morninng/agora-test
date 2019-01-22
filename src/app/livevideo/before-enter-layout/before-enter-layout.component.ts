@@ -13,18 +13,20 @@ import { take } from 'rxjs/operators';
 })
 export class BeforeEnterLayoutComponent implements OnInit {
 
+  own_uid = '';
+
   constructor(
     private agoraIoService: AgoraIoService,
     private userAuthService: UserAuthService,
     private router: Router) { }
 
   ngOnInit() {
+    this.own_uid = this.userAuthService.get_own_user_id();
   }
 
 
   enter_room() {
-    const own_uid = this.userAuthService.get_own_user_id();
-    this.agoraIoService.enter_webrtc_beforeenter(own_uid);
+    this.agoraIoService.enter_webrtc_beforeenter(this.own_uid);
     this.agoraIoService.monitor_webrtc_enter$()
     .pipe(
       take(1)
