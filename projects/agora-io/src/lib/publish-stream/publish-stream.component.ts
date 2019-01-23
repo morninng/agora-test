@@ -23,7 +23,7 @@ export class PublishStreamComponent implements OnInit {
 
 
   publish() {
-    console.log('publish');
+    console.log('--- publish');
     this.agoraIoService.publish_stream();
     this.change_ref.detectChanges();
   }

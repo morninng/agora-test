@@ -475,6 +475,7 @@ export class AgoraIoService {
 
 
   publish_stream = () => {
+    console.log('publish stream in service');
     if (!this._localStream) {
       return;
     }
