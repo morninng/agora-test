@@ -1,0 +1,11 @@
+<p>
+  added-stream works!
+</p>
+
+
+<ng-container *ngFor="let id of added_stream_id_arr">
+
+    <p>{{id}} <button (click)="subscribe_stream(id)">subscribe</button> <button (click)="unsubscribe_stream(id)">unsubscribe</button></p>
+
+</ng-container>
+

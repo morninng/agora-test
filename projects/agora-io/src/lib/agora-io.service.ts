@@ -40,8 +40,13 @@ export class AgoraIoService {
 
   _own_uid = null;
   _own_stream_id = null;
-  remote_stream_arr_subject$: BehaviorSubject<AgoraStream[]>;
-  remote_stream_arr_observable$: Observable<AgoraStream[]>;
+  remote_subscribed_stream_arr_subject$: BehaviorSubject<AgoraStream[]>;
+  remote_subscribed_stream_arr_observable$: Observable<AgoraStream[]>;
+  remote_added_stream_arr_subject$: BehaviorSubject<AgoraStream[]>;
+  remote_added_stream_arr_observable$: Observable<AgoraStream[]>;
+
+
+
   _remote_stream_added_id_arr = [];
   _remote_stream_arr = [];
   // _is_joined = false;
@@ -70,8 +75,11 @@ export class AgoraIoService {
     return this._remote_stream_added_id_arr || [];
   }
 
-  get_remote_streams$(): Observable<AgoraStream> {
-    return this.remote_stream_arr_observable$;
+  get_remote_subscribed_streams$(): Observable<AgoraStream> {
+    return this.remote_subscribed_stream_arr_observable$;
+  }
+  get_remote_added_stream$(){
+    return this.remote_added_stream_arr_observable$;
   }
 
   get_is_initialized(){
@@ -108,8 +116,13 @@ export class AgoraIoService {
 
 
    initialize_subject() {
-    this.remote_stream_arr_subject$ = this.remote_stream_arr_subject$ || new BehaviorSubject([]);
-    this.remote_stream_arr_observable$ = this.remote_stream_arr_subject$.asObservable();
+    this.remote_subscribed_stream_arr_subject$ = this.remote_subscribed_stream_arr_subject$ || new BehaviorSubject([]);
+    this.remote_subscribed_stream_arr_observable$ = this.remote_subscribed_stream_arr_subject$.asObservable();
+
+    this.remote_added_stream_arr_subject$ = this.remote_added_stream_arr_subject$ || new BehaviorSubject([]);
+    this.remote_added_stream_arr_observable$ = this.remote_added_stream_arr_subject$.asObservable();
+
+    
 
     this.is_initialized = false;
     this.is_initialized_subject$ = this.is_initialized_subject$ || new ReplaySubject(0);
@@ -125,10 +138,16 @@ export class AgoraIoService {
 
    complete_subject(){
 
-    if(this.remote_stream_arr_subject$){
-      this.remote_stream_arr_subject$.complete();
-      this.remote_stream_arr_subject$ = null;
-      this.remote_stream_arr_observable$ = null;
+    if(this.remote_subscribed_stream_arr_subject$){
+      this.remote_subscribed_stream_arr_subject$.complete();
+      this.remote_subscribed_stream_arr_subject$ = null;
+      this.remote_subscribed_stream_arr_observable$ = null;
+    }
+
+    if(this.remote_added_stream_arr_subject$){
+      this.remote_added_stream_arr_subject$.complete();
+      this.remote_added_stream_arr_subject$ = null;
+      this.remote_added_stream_arr_observable$ = null;
     }
 
     if(this.is_initialized_subject$) {
@@ -162,7 +181,7 @@ export class AgoraIoService {
     this._client = AgoraRTC.createClient({mode, codec});
 
     this._client.on('stream-published', (evt) => {
-      console.log('----stream-published');
+      console.log('---on-stream-published');
 
       this._client.getLocalAudioStats((stats) => {
         console.log('----getLocalAudioStats', stats);
@@ -171,98 +190,99 @@ export class AgoraIoService {
 
     this._client.on('stream-added', (evt) => {
       const stream = evt.stream;
-      console.log('----stream-added: ' + stream.getId());
+      console.log('--on--stream-added: ' + stream.getId());
       this.onStreamAdded(stream);
     });
 
     this._client.on('stream-removed', (evt) => {
       const stream = evt.stream;
-      console.log(`-----stream-removed ${stream.getId()}`);
+      console.log(`----on-stream-removed ${stream.getId()}`);
+      this.onStreamRemoved(stream);
     });
 
     this._client.on('stream-subscribed', (evt) => {
       const stream = evt.stream;
-      console.log(`-----stream-subscribed  ${stream.getId()}`);
+      console.log(`----on-stream-subscribed  ${stream.getId()}`);
       this.onStreamSubscribed(stream);
     });
 
     this._client.on('peer-leave', (evt) => {
       const uid = evt.uid;
-      console.log(`-----peer-leave ${uid}`);
+      console.log(`----on-peer-leave ${uid}`);
     });
 
     this._client.on('mute-audio', (evt) => {
       const uid = evt.uid;
-      console.log(`-----'mute-audio ${uid}`);
+      console.log(`----on-'mute-audio ${uid}`);
     });
 
     this._client.on('unmute-audio', (evt) => {
       const uid = evt.uid;
-      console.log(`-----'unmute-audio ${uid}`);
+      console.log(`----on-'unmute-audio ${uid}`);
     });
 
     this._client.on('mute-video', (evt) => {
       const uid = evt.uid;
-      console.log(`-----mute-video${uid}`);
+      console.log(`----on-mute-video${uid}`);
     });
     this._client.on('unmute-video', (evt) => {
       const uid = evt.uid;
-      console.log(`-----unmute-video${uid}`);
+      console.log(`----on-unmute-video${uid}`);
     });
 
     this._client.on('client-banned', (evt) => {
       const uid = evt.uid;
       const attr = evt.attr;
-      console.log(`-----client-banned ${uid} ${attr}`);
+      console.log(`----on-client-banned ${uid} ${attr}`);
     });
     this._client.on('active-speaker', (evt) => {
       const uid = evt.uid;
-      console.log(`-----active-speaker ${uid}`);
+      console.log(`----on-active-speaker ${uid}`);
     });
     this._client.on('volume-indicator', (evt) => {
       evt.attr.forEach( (volume, index) => {
-        console.log(`-----#{index} UID ${volume.uid} Level ${volume.level}`);
+        console.log(`----on-#{index} UID ${volume.uid} Level ${volume.level}`);
       });
     });
     this._client.on('liveStreamingStarted', (evt) => {
-      console.log(`-----liveStreamingStarted`);
+      console.log(`----on-liveStreamingStarted`);
     });
 
     this._client.on('liveStreamingFailed', (evt) => {
-      console.log(`-----liveStreamingFailed`);
+      console.log(`----on-liveStreamingFailed`);
     });
     this._client.on('liveStreamingStopped', (evt) => {
-      console.log(`-----liveStreamingStopped`);
+      console.log(`----on-liveStreamingStopped`);
     });
 
     this._client.on('liveTranscodingUpdated', (evt) => {
-      console.log(`-----liveTranscodingUpdated`);
+      console.log(`----on-liveTranscodingUpdated`);
     });
     this._client.on('onTokenPrivilegeWillExpire', (evt) => {
-      console.log(`-----onTokenPrivilegeWillExpire`);
+      console.log(`----on-onTokenPrivilegeWillExpire`);
     });
     this._client.on('onTokenPrivilegeDidExpire', (evt) => {
-      console.log(`-----onTokenPrivilegeDidExpire`);
+      console.log(`----on-onTokenPrivilegeDidExpire`);
     });
     this._client.on('error', (err) => {
-      console.log(`-----error ${ err.reason}`);
+      console.log(`----on-error ${ err.reason}`);
     });
 
     this._client.on('networkTypeChanged', (evt) => {
-      console.log(`-----networkTypeChanged ${evt.networkType}`);
+      console.log(`----on-networkTypeChanged ${evt.networkType}`);
     });
     this._client.on('recordingDeviceChanged', (evt) => {
-      console.log(`----- recordingDeviceChanged ${evt.state} ${evt.device}`);
+      console.log(`----on- recordingDeviceChanged ${evt.state} ${evt.device}`);
     });
 
     this._client.on('playoutDeviceChanged', (evt) => {
-      console.log(`-----playoutDeviceChanged ${evt.state} ${evt.device}`);
+      console.log(`----on-playoutDeviceChanged ${evt.state} ${evt.device}`);
     });
     this._client.on('cameraChanged', (evt) => {
-      console.log(`-----cameraChanged ${evt.state} ${evt.device}`);
+      console.log(`----on-cameraChanged ${evt.state} ${evt.device}`);
     });
     this._client.on('streamTypeChange', (evt) => {
-      console.log(`----- streamTypeChange  ${evt.state} ${evt.device}`);
+      console.log(`----on- streamTypeChange  ${evt.state} ${evt.device}`);
     });
 
 
@@ -293,21 +313,61 @@ export class AgoraIoService {
 
   onStreamAdded(remoteStream) {
 
-    const remoteStreamId = remoteStream.getId();
-    this.remote_stream_added_id_arr.push(remoteStreamId);
+    // const remoteStreamId = remoteStream.getId();
+    // this.remote_stream_added_id_arr.push(remoteStreamId);
 
-    console.log('----onStreamAdded');
 
-    this._client.subscribe(remoteStream, (err) => {
+    console.log('----onStreamAdded', remoteStream);
+
+    const added_streams = this.remote_added_stream_arr_subject$.getValue();
+    added_streams.push(remoteStream);
+    this.remote_added_stream_arr_subject$.next(added_streams);
+
+
+
+    // this._client.subscribe(remoteStream, (err) => {
+    //   console.log('----Subscribe stream failed', err);
+    // });
+  }
+
+  subscribe_added_stream(strem_id){
+    const added_streams = this.remote_added_stream_arr_subject$.getValue();
+    added_streams.forEach( (stream) => {
+      const stream_id2 = stream.getId();
+      if (stream_id2 === strem_id) {
+        this.subscribeStream(stream);
+      }
+    });
+  }
+
+  subscribeStream(stream){
+    this._client.subscribe(stream, (err) => {
+      console.log('----Subscribe stream failed', err);
+    });
+  }
+
+
+  unsubscribe_added_stream(strem_id){
+    const added_streams = this.remote_added_stream_arr_subject$.getValue();
+    added_streams.forEach( (stream) => {
+      const stream_id2 = stream.getId();
+      if (stream_id2 === strem_id) {
+        this.unsubscribeStream(stream);
+      }
+    });
+  }
+
+  unsubscribeStream(stream){
+    this._client.unsubscribe(stream, (err) => {
       console.log('----Subscribe stream failed', err);
     });
   }
 
   onStreamSubscribed(remoteStream) {
 
-    const current_streams = this.remote_stream_arr_subject$.getValue();
+    const current_streams = this.remote_subscribed_stream_arr_subject$.getValue();
     current_streams.push(remoteStream);
-    this.remote_stream_arr_subject$.next(current_streams);
+    this.remote_subscribed_stream_arr_subject$.next(current_streams);
 
     // this._remote_stream_arr.push(remoteStream);
 
