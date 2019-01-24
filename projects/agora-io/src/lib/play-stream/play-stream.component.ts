@@ -74,9 +74,10 @@ export class PlayStreamComponent implements OnInit, OnDestroy {
   }
 
   stop_play_stream(stream_arr: AgoraStream[]) {
-    console.log('-------remove_stream', stream_arr)
+    console.log('-------stop_play_stream', stream_arr)
     stream_arr.forEach((stream: AgoraStream) => {
       stream.stop();
+      stream.close();
       stream = null;
     });
   }

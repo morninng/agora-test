@@ -53,7 +53,11 @@ export class AgoraIoService {
   _is_published = false;
 
   is_speaker_on = true;
-  is_microphone_on = true;
+  _is_microphone_on = true;
+
+  get_is_microphone_on() {
+    return this._is_microphone_on;
+  }
 
   get own_stream_id(): string {
     return this._own_stream_id || '';
@@ -209,6 +213,7 @@ export class AgoraIoService {
     this._client.on('peer-leave', (evt) => {
       const uid = evt.uid;
       console.log(`----on-peer-leave ${uid}`);
+      this.onUserLeave(uid);
     });
 
     this._client.on('mute-audio', (evt) => {
@@ -328,6 +333,7 @@ export class AgoraIoService {
     // this._client.subscribe(remoteStream, (err) => {
     //   console.log('----Subscribe stream failed', err);
     // });
+    // this.subscribeStream(remoteStream);
   }
 
   subscribe_added_stream(strem_id){
@@ -369,6 +375,9 @@ export class AgoraIoService {
     current_streams.push(remoteStream);
     this.remote_subscribed_stream_arr_subject$.next(current_streams);
 
+
+
+
     // this._remote_stream_arr.push(remoteStream);
 
     // const remoteStreamId = remoteStream.getId();
@@ -383,10 +392,43 @@ export class AgoraIoService {
   }
 
   onStreamRemoved(remoteStream) {
-    console.log('--------onStreamRemoved');
-    const remoteStreamId = remoteStream.getId();
-    remoteStream.stop();
+    const removedStreamId = remoteStream.getId();
+    console.log('--------onStreamRemoved', removedStreamId);
+    this.removeStream(removedStreamId);
+
   }
+
+  removeStream(removedStreamId){
+    const current_subscribed_streams = this.remote_subscribed_stream_arr_subject$.getValue();
+    let revmoved_subscriped_stream_index = -1;
+    current_subscribed_streams.forEach( (stream: AgoraStream, index ) => {
+      if (removedStreamId === stream.getId()) {
+        revmoved_subscriped_stream_index = index;
+      }
+    });
+    if (revmoved_subscriped_stream_index !== -1) {
+      current_subscribed_streams.splice(revmoved_subscriped_stream_index, 1);
+    }
+    this.remote_subscribed_stream_arr_subject$.next(current_subscribed_streams);
+
+    const current_added_streams = this.remote_added_stream_arr_subject$.getValue();
+    let revmoved_added_stream_index = -1;
+    current_added_streams.forEach( (stream: AgoraStream, index) => {
+      const stream_id2 = stream.getId();
+      if (stream_id2 === removedStreamId) {
+        revmoved_added_stream_index = index;
+      }
+    });
+    if (revmoved_added_stream_index !== -1) {
+      current_added_streams.splice(revmoved_added_stream_index, 1);
+    }
+    this.remote_added_stream_arr_subject$.next(current_added_streams);
+  }
+
+  onUserLeave(uid) {
+    this.removeStream(uid);
+  }
+
 
 
   create_stream = (own_uid) => {
@@ -524,7 +566,7 @@ export class AgoraIoService {
       return;
     }
     this._localStream.enableAudio();
-    this.is_microphone_on = true;
+    this._is_microphone_on = true;
   }
 
 
@@ -533,7 +575,7 @@ export class AgoraIoService {
       return;
     }
     this._localStream.disableAudio();
-    this.is_microphone_on = false;
+    this._is_microphone_on = false;
   }
 
 

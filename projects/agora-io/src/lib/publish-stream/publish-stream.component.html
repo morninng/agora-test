@@ -2,12 +2,20 @@
   publish-stream works!
 </p>
 
-is_published {{ is_published }}
-
-<button (click)="publish()">
-  publish
-</button>
-
-<button (click)="unpublish()">
-    unpublish
+<p>
+  is_published <b>{{ is_published }}</b> 
+  <button (click)="publish()">
+    publish
   </button>
+
+  <button (click)="unpublish()">
+      unpublish
+    </button>
+</p>
+
+<p>
+is_microphone_on <b>{{is_microphone_on}}</b> 
+  <button (click)="microphone_on()">microphone on</button>
+  <button (click)="microphone_off()">microphone off</button>
+
+</p>

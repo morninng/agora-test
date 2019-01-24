@@ -4,10 +4,13 @@
 
 
 
-<p>stream_id_list</p>
+<lib-added-stream></lib-added-stream>
+
+
+
+
+<p><b>stream_id_list in play-stream</b></p>
 
 <ng-container *ngFor="let stream_id of current_stream_id_arr">
-  <p id="{{stream_id}}">{{stream_id}}</p>
+  <p id="{{stream_id}}">played stream {{stream_id}}</p>
 </ng-container>
-
-<lib-added-stream></lib-added-stream>

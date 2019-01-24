@@ -12,6 +12,9 @@ export class PublishStreamComponent implements OnInit {
     return this.agoraIoService.get_is_published();
   }
 
+  get is_microphone_on(){
+    return this.agoraIoService.get_is_microphone_on();
+  }
   
   constructor(
     private agoraIoService: AgoraIoService,
@@ -19,8 +22,6 @@ export class PublishStreamComponent implements OnInit {
   ) { }
 
   ngOnInit() {}
-
-
 
   publish() {
     console.log('--- publish');
@@ -31,6 +32,14 @@ export class PublishStreamComponent implements OnInit {
   unpublish() {
     this.agoraIoService.unpublish_stream();
     this.change_ref.detectChanges();
+  }
+
+  microphone_on() {
+    this.agoraIoService.microphone_on();
+  }
+
+  microphone_off() {
+    this.agoraIoService.microphone_off();
   }
 
 }
