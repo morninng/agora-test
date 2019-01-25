@@ -35,11 +35,6 @@ export class AgoraIoService {
 
 
 
-
-
-
-  _own_uid = null;
-  _own_stream_id = null;
   remote_subscribed_stream_arr_subject$: BehaviorSubject<AgoraStream[]>;
   remote_subscribed_stream_arr_observable$: Observable<AgoraStream[]>;
   remote_added_stream_arr_subject$: BehaviorSubject<AgoraStream[]>;
@@ -47,21 +42,21 @@ export class AgoraIoService {
 
 
 
-  _remote_stream_added_id_arr = [];
-  _remote_stream_arr = [];
   // _is_joined = false;
   _is_published = false;
 
-  is_speaker_on = true;
+  _is_speaker_on = true;
   _is_microphone_on = true;
+
+  get_is_speaker_on() {
+    return this._is_speaker_on;
+  }
 
   get_is_microphone_on() {
     return this._is_microphone_on;
   }
 
-  get own_stream_id(): string {
-    return this._own_stream_id || '';
-  }
+
   get localStream_id(): string {
     return this._localStream.getId() || '';
   }
@@ -71,17 +66,10 @@ export class AgoraIoService {
     return this._is_published;
   }
 
-  get remote_stream_arr() {
-    return this._remote_stream_arr || [];
-  }
-
-  get remote_stream_added_id_arr() {
-    return this._remote_stream_added_id_arr || [];
-  }
-
   get_remote_subscribed_streams$(): Observable<AgoraStream> {
     return this.remote_subscribed_stream_arr_observable$;
   }
+
   get_remote_added_stream$(){
     return this.remote_added_stream_arr_observable$;
   }
@@ -194,7 +182,8 @@ export class AgoraIoService {
 
     this._client.on('stream-added', (evt) => {
       const stream = evt.stream;
-      console.log('--on--stream-added: ' + stream.getId());
+      const stream_id = stream.getId();
+      console.log('--on--stream-added: ' + stream_id);
       this.onStreamAdded(stream);
     });
 
@@ -206,7 +195,8 @@ export class AgoraIoService {
 
     this._client.on('stream-subscribed', (evt) => {
       const stream = evt.stream;
-      console.log(`----on-stream-subscribed  ${stream.getId()}`);
+      const stream_id = stream.getId();
+      console.log(`----on-stream-subscribed  ${stream_id}`);
       this.onStreamSubscribed(stream);
     });
 
@@ -271,6 +261,10 @@ export class AgoraIoService {
     });
     this._client.on('error', (err) => {
       console.log(`----on-error ${ err.reason}`);
+
+      alert(err.reason);
+
+
     });
 
     this._client.on('networkTypeChanged', (evt) => {
@@ -318,33 +312,46 @@ export class AgoraIoService {
 
   onStreamAdded(remoteStream) {
 
-    // const remoteStreamId = remoteStream.getId();
-    // this.remote_stream_added_id_arr.push(remoteStreamId);
-
-
     console.log('----onStreamAdded', remoteStream);
+    this.add_stream_on_addedStreamSubject(remoteStream);
+  }
 
+  private add_stream_on_addedStreamSubject(remoteStream) {
     const added_streams = this.remote_added_stream_arr_subject$.getValue();
     added_streams.push(remoteStream);
     this.remote_added_stream_arr_subject$.next(added_streams);
-
-
-
-    // this._client.subscribe(remoteStream, (err) => {
-    //   console.log('----Subscribe stream failed', err);
-    // });
-    // this.subscribeStream(remoteStream);
   }
+
+
 
   subscribe_added_stream(strem_id){
-    const added_streams = this.remote_added_stream_arr_subject$.getValue();
-    added_streams.forEach( (stream) => {
-      const stream_id2 = stream.getId();
-      if (stream_id2 === strem_id) {
-        this.subscribeStream(stream);
-      }
-    });
+    const stream = this.get_addedStream_from_streamId(strem_id)
+    this.subscribeStream(stream);
   }
+
+
+
+  subscribe_again_after_unsubscribe(strem_id) {
+
+    this.subscribe_added_stream(strem_id);
+
+    const stream = this.get_addedStream_from_streamId(strem_id);
+    this.addRemoteStreamToSubscribedStream(stream);
+  }
+
+  private get_addedStream_from_streamId(strem_id){
+
+    const added_streams = this.remote_added_stream_arr_subject$.getValue();
+    for (let i = 0; i < added_streams.length; i++) {
+      const stream_id2 = added_streams[i].getId();
+      if (stream_id2 === strem_id) {
+        return added_streams[i];
+      }
+    }
+
+  }
+
+
 
   subscribeStream(stream){
     this._client.subscribe(stream, (err) => {
@@ -354,42 +361,33 @@ export class AgoraIoService {
 
 
   unsubscribe_added_stream(strem_id){
-    const added_streams = this.remote_added_stream_arr_subject$.getValue();
-    added_streams.forEach( (stream) => {
-      const stream_id2 = stream.getId();
-      if (stream_id2 === strem_id) {
-        this.unsubscribeStream(stream);
-      }
-    });
+
+    const stream = this.get_addedStream_from_streamId(strem_id);
+    this.unsubscribeStream(stream);
   }
 
   unsubscribeStream(stream){
     this._client.unsubscribe(stream, (err) => {
       console.log('----Subscribe stream failed', err);
     });
+    const removedStreamId = stream.getId();
+    this.remove_subscribed_stream(removedStreamId); // added stream should be remained.
   }
 
   onStreamSubscribed(remoteStream) {
+
+    this.addRemoteStreamToSubscribedStream(remoteStream);
+  }
+
+  private addRemoteStreamToSubscribedStream(remoteStream){
 
     const current_streams = this.remote_subscribed_stream_arr_subject$.getValue();
     current_streams.push(remoteStream);
     this.remote_subscribed_stream_arr_subject$.next(current_streams);
 
-
-
-
-    // this._remote_stream_arr.push(remoteStream);
-
-    // const remoteStreamId = remoteStream.getId();
-    // const element_attribute = this.get_remote_stream_id(remoteStreamId);
-    // this._remote_stream_subscribed_id_arr.push(element_attribute);
-
-    // console.log('----Subscribe remote stream successfully: ' + element_attribute);
-    // setTimeout(() => {
-    //   remoteStream.play(element_attribute);
-    // }, 100);
-
   }
+
+
 
   onStreamRemoved(remoteStream) {
     const removedStreamId = remoteStream.getId();
@@ -399,6 +397,12 @@ export class AgoraIoService {
   }
 
   removeStream(removedStreamId){
+    this.remove_subscribed_stream(removedStreamId);
+    this.remove_added_sream(removedStreamId);
+
+  }
+
+  remove_subscribed_stream(removedStreamId){
     const current_subscribed_streams = this.remote_subscribed_stream_arr_subject$.getValue();
     let revmoved_subscriped_stream_index = -1;
     current_subscribed_streams.forEach( (stream: AgoraStream, index ) => {
@@ -410,6 +414,10 @@ export class AgoraIoService {
       current_subscribed_streams.splice(revmoved_subscriped_stream_index, 1);
     }
     this.remote_subscribed_stream_arr_subject$.next(current_subscribed_streams);
+  }
+
+  remove_added_sream(removedStreamId){
+
 
     const current_added_streams = this.remote_added_stream_arr_subject$.getValue();
     let revmoved_added_stream_index = -1;
@@ -547,18 +555,22 @@ export class AgoraIoService {
 
 
   speaker_on() {
-    this._remote_stream_arr.forEach( (remote_stream) => {
+
+    const current_streams = this.remote_subscribed_stream_arr_subject$.getValue();
+
+    current_streams.forEach( (remote_stream) => {
       remote_stream.setAudioVolume(100);
     });
-    this.is_speaker_on = true;
+    this._is_speaker_on = true;
   }
 
   speaker_off() {
 
-    this._remote_stream_arr.forEach( (remote_stream) => {
+    const current_streams = this.remote_subscribed_stream_arr_subject$.getValue();
+    current_streams.forEach( (remote_stream) => {
       remote_stream.setAudioVolume(0);
     });
-    this.is_speaker_on = false;
+    this._is_speaker_on = false;
   }
 
   microphone_on() {
@@ -568,7 +580,6 @@ export class AgoraIoService {
     this._localStream.enableAudio();
     this._is_microphone_on = true;
   }
-
 
   microphone_off() {
     if (!this._localStream) {

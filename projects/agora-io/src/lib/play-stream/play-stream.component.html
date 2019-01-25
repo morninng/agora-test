@@ -14,3 +14,9 @@
 <ng-container *ngFor="let stream_id of current_stream_id_arr">
   <p id="{{stream_id}}">played stream {{stream_id}}</p>
 </ng-container>
+
+<p>
+  is_speaker_on <b>{{is_speaker_on}}</b>  
+    <button (click)="speaker_on()">speaker_on</button> 
+    <button (click)="speaker_off()">speaker_off</button> 
+</p>

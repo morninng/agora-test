@@ -12,6 +12,10 @@ export class PlayStreamComponent implements OnInit, OnDestroy {
   current_stream_id_arr: string[] = [];
   current_stream_arr: AgoraStream[] = [];
 
+  get is_speaker_on() {
+    return this.agoraIoService.get_is_speaker_on();
+  }
+
   constructor(
     private change_ref: ChangeDetectorRef,
     private agoraIoService: AgoraIoService
@@ -77,9 +81,17 @@ export class PlayStreamComponent implements OnInit, OnDestroy {
     console.log('-------stop_play_stream', stream_arr)
     stream_arr.forEach((stream: AgoraStream) => {
       stream.stop();
-      stream.close();
-      stream = null;
+      // stream.close();
+      // stream = null;
     });
+  }
+
+  speaker_on() {
+    this.agoraIoService.speaker_on();
+  }
+
+  speaker_off() {
+    this.agoraIoService.speaker_off();
   }
 
   ngOnDestroy() {

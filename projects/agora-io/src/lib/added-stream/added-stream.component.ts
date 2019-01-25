@@ -33,7 +33,6 @@ export class AddedStreamComponent implements OnInit {
       this.added_stream_id_arr = added_stream_id_arr;
       this.change_ref.detectChanges();
     });
-
   }
 
   subscribe_stream(stream_id) {
@@ -41,7 +40,6 @@ export class AddedStreamComponent implements OnInit {
     console.log('---- subscribe_stream', stream_id);
 
     this.agoraIoService.subscribe_added_stream(stream_id);
-
   }
 
   unsubscribe_stream(stream_id) {
@@ -51,5 +49,9 @@ export class AddedStreamComponent implements OnInit {
     this.agoraIoService.unsubscribe_added_stream(stream_id);
   }
 
+  subscribe_again_after_unsubscribe(stream_id){
+    console.log('---- subscribe_again_after_unsubscribe', stream_id);
+    this.agoraIoService.subscribe_again_after_unsubscribe(stream_id);
+  }
 
 }
