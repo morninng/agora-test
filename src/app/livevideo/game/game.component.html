@@ -9,7 +9,7 @@ is_room_joined {{is_room_joined}}
 </p>
 
 <ng-container *ngIf="is_room_joined">
-  <lib-publish-stream></lib-publish-stream>
+  <lib-publish-stream [own_uid]="own_uid"></lib-publish-stream>
 </ng-container>
 
 <br><br><br>

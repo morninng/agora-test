@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core';
 import { AgoraIoService } from '../agora-io.service';
 
 @Component({
@@ -7,6 +7,8 @@ import { AgoraIoService } from '../agora-io.service';
   styleUrls: ['./publish-stream.component.css']
 })
 export class PublishStreamComponent implements OnInit {
+
+  @Input() own_uid;
 
   get is_published(){
     return this.agoraIoService.get_is_published();
@@ -25,7 +27,7 @@ export class PublishStreamComponent implements OnInit {
 
   publish() {
     console.log('--- publish');
-    this.agoraIoService.publish_stream();
+    this.agoraIoService.publish_stream(this.own_uid);
     this.change_ref.detectChanges();
   }
 

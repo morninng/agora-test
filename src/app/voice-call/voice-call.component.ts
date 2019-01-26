@@ -74,7 +74,8 @@ export class VoiceCallComponent implements OnInit, OnDestroy {
   }
 
   publish_stream = () => {
-    this.agoraIoService.publish_stream();
+    const own_uid = this.userAuthService.get_own_user_id();
+    this.agoraIoService.publish_stream(own_uid);
   }
   unpublish_stream = () => {
     this.agoraIoService.unpublish_stream();

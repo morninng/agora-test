@@ -37,4 +37,19 @@ export class BeforeEnterLayoutComponent implements OnInit {
 
   }
 
+  enter_room_without_stream(){
+
+    this.agoraIoService.enter_webrtc_beforeenter_withoutstream(this.own_uid);
+    this.agoraIoService.monitor_webrtc_enter_withoutstream$()
+    .pipe(
+      take(1)
+    )
+    .subscribe(() => {
+      this.router.navigate(['/livevideo/game/']);
+    });
+
+  }
+
+
+
 }

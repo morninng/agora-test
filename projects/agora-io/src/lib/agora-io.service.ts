@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import * as AgoraRTC from 'agora-rtc-sdk';
 import { BehaviorSubject, Observable, ReplaySubject, combineLatest } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
+import { map, filter, take } from 'rxjs/operators';
 
 type AgoraClientCodec = 'vp8' | 'h264';
 type AgoraClientMode = 'live' | 'rtc';
@@ -81,6 +81,19 @@ export class AgoraIoService {
   constructor() {
     // this.initialize();
 
+   }
+
+   enter_webrtc_beforeenter_withoutstream(own_uid){
+    this.initialize_subject();
+    this.initialize_webrtc();
+  }
+  monitor_webrtc_enter_withoutstream$() {
+    return this.is_initialized_observable$
+    .pipe(
+      filter((is_initialized) => {
+      return is_initialized;
+      }
+    ));
    }
 
    enter_webrtc_beforeenter(own_uid){
@@ -301,7 +314,7 @@ export class AgoraIoService {
   get_initialized_done$(): Observable<boolean>{
     return this.is_initialized_observable$;
   }
-
+  
   get localStreamId() {
     if (this._localStream) {
       return this._localStream.getId();
@@ -325,7 +338,7 @@ export class AgoraIoService {
 
 
   subscribe_added_stream(strem_id){
-    const stream = this.get_addedStream_from_streamId(strem_id)
+    const stream = this.get_addedStream_from_streamId(strem_id);
     this.subscribeStream(stream);
   }
 
@@ -348,7 +361,6 @@ export class AgoraIoService {
         return added_streams[i];
       }
     }
-
   }
 
 
@@ -524,17 +536,28 @@ export class AgoraIoService {
 
 
 
-  publish_stream = () => {
+  publish_stream = (own_uid) => {
     console.log('publish stream in service');
     if (!this._localStream) {
-      return;
+      this.create_stream(own_uid);
     }
-    this._is_published = true;
 
-    // this.localStream.play('agora_local');
-    this._client.publish(this._localStream, (err) => {
-      console.log('----Publish local stream error: ' + err);
-      this._is_published = false;
+    this.is_localstream_created_subject$.
+    pipe(
+      take(1)
+    )
+    .subscribe((value) => {
+
+      if (!value) {
+        alert('media is not approved');
+      }
+
+      this._is_published = true;
+      this._client.publish(this._localStream, (err) => {
+        console.log('----Publish local stream error: ' + err);
+        this._is_published = false;
+      });
+
     });
 
   }
