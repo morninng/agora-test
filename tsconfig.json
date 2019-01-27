@@ -23,6 +23,12 @@
       ],
       "agora-io/*": [
         "dist/agora-io/*"
+      ],
+      "skyway": [
+        "dist/skyway"
+      ],
+      "skyway/*": [
+        "dist/skyway/*"
       ]
     }
   }

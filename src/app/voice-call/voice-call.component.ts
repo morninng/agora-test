@@ -21,16 +21,16 @@ export class VoiceCallComponent implements OnInit, OnDestroy {
   is_room_joined = false;
 
   constructor(
-    private change_ref: ChangeDetectorRef,
-    private agoraIoService: AgoraIoService,
-    private userAuthService: UserAuthService
+    // private change_ref: ChangeDetectorRef,
+    // private agoraIoService: AgoraIoService,
+    // private userAuthService: UserAuthService
   ) { }
 
   ngOnInit() {
     // console.log(AgoraRTC);
-    this.own_uid = this.userAuthService.get_own_user_id();
+    // this.own_uid = this.userAuthService.get_own_user_id();
   }
-
+/*
   start_initialize() {
 
     this.agoraIoService.initialize_webrtc();
@@ -95,7 +95,7 @@ export class VoiceCallComponent implements OnInit, OnDestroy {
   microphone_off() {
     this.agoraIoService.microphone_off();
   }
-
+*/
   ngOnDestroy() {
   }
 
