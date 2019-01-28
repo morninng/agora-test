@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { WebrtcSkywayService } from 'webrtc-skyway';
+
 @Component({
   selector: 'app-second-before-enter-layout',
   templateUrl: './second-before-enter-layout.component.html',
@@ -7,9 +9,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SecondBeforeEnterLayoutComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private skywayService: WebrtcSkywayService
+  ) { }
 
   ngOnInit() {
+  }
+
+  test() {
+
+    this.skywayService.test();
+
   }
 
 }

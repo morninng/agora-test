@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 
 import * as skywayPeer from 'skyway-js';
 
+
 @Injectable({
   providedIn: 'root'
 })
-export class SkywayService {
-
+export class WebrtcSkywayService {
 
   constructor() { }
 

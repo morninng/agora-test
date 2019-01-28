@@ -37,13 +37,16 @@
               ],
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": false,
+              "sourceMap": true,
               "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true
+            },
+            "development": {
+              "sourceMap": true
             }
           }
         },
@@ -55,6 +58,9 @@
           "configurations": {
             "production": {
               "browserTarget": "agora-test:build:production"
+            },
+            "development": {
+              "sourceMap": true
             }
           }
         },
@@ -133,6 +139,14 @@
           "options": {
             "tsConfig": "projects/agora-io/tsconfig.lib.json",
             "project": "projects/agora-io/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "sourceMap": true
+            },
+            "development": {
+              "sourceMap": true
+            }
           }
         },
         "test": {
@@ -141,6 +155,14 @@
             "main": "projects/agora-io/src/test.ts",
             "tsConfig": "projects/agora-io/tsconfig.spec.json",
             "karmaConfig": "projects/agora-io/karma.conf.js"
+          },
+          "configurations": {
+            "production": {
+              "sourceMap": true
+            },
+            "development": {
+              "sourceMap": true
+            }
           }
         },
         "lint": {
@@ -168,6 +190,14 @@
           "options": {
             "tsConfig": "projects/skyway/tsconfig.lib.json",
             "project": "projects/skyway/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "sourceMap": true
+            },
+            "development": {
+              "sourceMap": true
+            }
           }
         },
         "test": {
@@ -176,6 +206,14 @@
             "main": "projects/skyway/src/test.ts",
             "tsConfig": "projects/skyway/tsconfig.spec.json",
             "karmaConfig": "projects/skyway/karma.conf.js"
+          },
+          "configurations": {
+            "production": {
+              "sourceMap": true
+            },
+            "development": {
+              "sourceMap": true
+            }
           }
         },
         "lint": {
@@ -184,6 +222,41 @@
             "tsConfig": [
               "projects/skyway/tsconfig.lib.json",
               "projects/skyway/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "webrtc-skyway": {
+      "root": "projects/webrtc-skyway",
+      "sourceRoot": "projects/webrtc-skyway/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/webrtc-skyway/tsconfig.lib.json",
+            "project": "projects/webrtc-skyway/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/webrtc-skyway/src/test.ts",
+            "tsConfig": "projects/webrtc-skyway/tsconfig.spec.json",
+            "karmaConfig": "projects/webrtc-skyway/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/webrtc-skyway/tsconfig.lib.json",
+              "projects/webrtc-skyway/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"

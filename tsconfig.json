@@ -29,6 +29,12 @@
       ],
       "skyway/*": [
         "dist/skyway/*"
+      ],
+      "webrtc-skyway": [
+        "dist/webrtc-skyway"
+      ],
+      "webrtc-skyway/*": [
+        "dist/webrtc-skyway/*"
       ]
     }
   }

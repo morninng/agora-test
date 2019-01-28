@@ -4,13 +4,15 @@ import { CommonModule } from '@angular/common';
 import { LivevideoSecondRoutingModule } from './livevideo-second-routing.module';
 import { SecondBeforeEnterLayoutComponent } from './second-before-enter-layout/second-before-enter-layout.component';
 
-import { SkywayModule } from 'skyway';
+import { WebrtcSkywayModule } from 'webrtc-skyway';
+import { SecondGameComponent } from './second-game/second-game.component';
 
 @NgModule({
   imports: [
     CommonModule,
-    LivevideoSecondRoutingModule
+    LivevideoSecondRoutingModule,
+    WebrtcSkywayModule
   ],
-  declarations: [SecondBeforeEnterLayoutComponent]
+  declarations: [SecondBeforeEnterLayoutComponent, SecondGameComponent]
 })
 export class LivevideoSecondModule { }
