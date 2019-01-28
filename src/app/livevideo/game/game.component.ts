@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 
-import { AgoraIoService } from 'agora-io';
+import * as webrtc from 'agora-io';
 import { UserAuthService } from '../../services/user-auth.service';
 
 
@@ -16,7 +16,7 @@ export class GameComponent implements OnInit {
 
   constructor(
     private change_ref: ChangeDetectorRef,
-    private agoraIoService: AgoraIoService,
+    private agoraIoService: webrtc.AgoraIoService,
     private userAuthService: UserAuthService,
   ) { }
 

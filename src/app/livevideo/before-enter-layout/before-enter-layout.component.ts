@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { AgoraIoService } from 'agora-io';
+import * as webrtc from 'agora-io';
 import { UserAuthService } from '../../services/user-auth.service';
 
 import { take } from 'rxjs/operators';
@@ -16,7 +16,7 @@ export class BeforeEnterLayoutComponent implements OnInit {
   own_uid = '';
 
   constructor(
-    private agoraIoService: AgoraIoService,
+    private agoraIoService: webrtc.AgoraIoService,
     private userAuthService: UserAuthService,
     private router: Router) { }
 

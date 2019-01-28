@@ -3,7 +3,7 @@ import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angul
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 
-import { AgoraIoService } from 'agora-io';
+import * as webrtc from 'agora-io';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +11,7 @@ import { AgoraIoService } from 'agora-io';
 export class BeforeenterBeforeGameGuard implements CanActivate {
 
   constructor(
-    private agoraIoService: AgoraIoService,
+    private agoraIoService: webrtc.AgoraIoService,
     private router: Router
   ){}
 
