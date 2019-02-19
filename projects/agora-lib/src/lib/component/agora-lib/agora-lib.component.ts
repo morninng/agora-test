@@ -2,12 +2,8 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'lib-agora-lib',
-  template: `
-    <p>
-      agora-lib works!
-    </p>
-  `,
-  styles: []
+  templateUrl: './agora-lib.component.html',
+  styleUrls: ['./agora-lib.component.css']
 })
 export class AgoraLibComponent implements OnInit {
 

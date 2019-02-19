@@ -1,10 +1,12 @@
 import { NgModule } from '@angular/core';
-import { AgoraLibComponent } from './agora-lib.component';
+import { AgoraLibComponent } from './component/agora-lib/agora-lib.component';
 
 @NgModule({
   declarations: [AgoraLibComponent],
   imports: [
   ],
-  exports: [AgoraLibComponent]
+  exports: [
+    AgoraLibComponent
+  ]
 })
 export class AgoraLibModule { }

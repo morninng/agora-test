@@ -2,6 +2,6 @@
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../../dist/agora-lib",
   "lib": {
-    "entryFile": "src/projects/sample-app2/src/app.ts"
+    "entryFile": "src/public-api.ts"
   }
 }
