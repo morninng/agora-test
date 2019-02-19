@@ -4,4 +4,5 @@
 
 // export * from './lib/agora-lib.service';
 // export * from './lib/agora-lib.component';
-export * from './lib/agora-lib.module';
+export { AgoraLibModule } from './lib/agora-lib.module';
+export { AgoraLibService } from './lib/services/agora-lib.service';

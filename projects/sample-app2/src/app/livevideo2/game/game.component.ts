@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { AgoraLibService } from 'agora-lib';
+
 @Component({
   selector: 'app-game',
   templateUrl: './game.component.html',
@@ -7,9 +9,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GameComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private agoraLibService: AgoraLibService
+  ) { }
 
   ngOnInit() {
+    this.agoraLibService.enter_room('aaa');
   }
 
 }
