@@ -35,6 +35,12 @@
       ],
       "webrtc-skyway/*": [
         "dist/webrtc-skyway/*"
+      ],
+      "agora-lib": [
+        "dist/agora-lib"
+      ],
+      "agora-lib/*": [
+        "dist/agora-lib/*"
       ]
     }
   }
