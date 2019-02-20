@@ -41,6 +41,12 @@
       ],
       "agora-lib/*": [
         "dist/agora-lib/*"
+      ],
+      "agora-three": [
+        "dist/agora-three"
+      ],
+      "agora-three/*": [
+        "dist/agora-three/*"
       ]
     }
   }
