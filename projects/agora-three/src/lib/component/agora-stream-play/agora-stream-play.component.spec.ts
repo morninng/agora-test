@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AgoraThreeComponent } from './agora-three.component';
+import { AgoraStreamPlayComponent } from './agora-stream-play.component';
 
-describe('AgoraThreeComponent', () => {
-  let component: AgoraThreeComponent;
-  let fixture: ComponentFixture<AgoraThreeComponent>;
+describe('AgoraStreamPlayComponent', () => {
+  let component: AgoraStreamPlayComponent;
+  let fixture: ComponentFixture<AgoraStreamPlayComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AgoraThreeComponent ]
+      declarations: [ AgoraStreamPlayComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AgoraThreeComponent);
+    fixture = TestBed.createComponent(AgoraStreamPlayComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

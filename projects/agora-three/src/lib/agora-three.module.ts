@@ -1,10 +1,13 @@
 import { NgModule } from '@angular/core';
-import { AgoraThreeComponent } from './agora-three.component';
+import { AgoraStreamPlayComponent } from './component/agora-stream-play/agora-stream-play.component';
+
+import { AgoraLibraryService } from './services/agora-library.service';
 
 @NgModule({
-  declarations: [AgoraThreeComponent],
+  declarations: [AgoraStreamPlayComponent],
   imports: [
   ],
-  exports: [AgoraThreeComponent]
+  exports: [AgoraStreamPlayComponent],
+  providers: [ AgoraLibraryService ]
 })
 export class AgoraThreeModule { }
