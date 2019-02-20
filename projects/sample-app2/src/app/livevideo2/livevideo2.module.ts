@@ -7,9 +7,10 @@ import { Livevideo2RoutingModule } from './livevideo2-routing.module';
 import { AllContainerComponent } from './all-container/all-container.component';
 import { BeforeEnterComponent } from './before-enter/before-enter.component';
 import { GameComponent } from './game/game.component';
+import { PrepComponent } from './prep/prep.component';
 
 @NgModule({
-  declarations: [AllContainerComponent, BeforeEnterComponent, GameComponent],
+  declarations: [AllContainerComponent, BeforeEnterComponent, GameComponent, PrepComponent],
   imports: [
     CommonModule,
     Livevideo2RoutingModule,

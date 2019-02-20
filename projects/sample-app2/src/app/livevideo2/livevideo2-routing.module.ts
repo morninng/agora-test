@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AllContainerComponent } from './all-container/all-container.component';
 import { BeforeEnterComponent } from './before-enter/before-enter.component';
 import { GameComponent} from './game/game.component';
+import { PrepComponent } from './prep/prep.component';
 
 const routes: Routes = [{
   path: '',
@@ -17,6 +18,10 @@ const routes: Routes = [{
       path: 'game',
       component: GameComponent,
     },
+    {
+      path: 'prep',
+      component: PrepComponent,
+    }
   ]
   }
 ];

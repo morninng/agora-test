@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { AgoraLibService } from 'agora-lib';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-game',
@@ -9,12 +11,25 @@ import { AgoraLibService } from 'agora-lib';
 })
 export class GameComponent implements OnInit {
 
+  audioEnabled$: Observable<boolean>;
+
   constructor(
-    private agoraLibService: AgoraLibService
+    private agoraLibService: AgoraLibService,
+    private router: Router
   ) { }
 
   ngOnInit() {
     this.agoraLibService.enter_room('aaa');
+    this.audioEnabled$ = this.agoraLibService.get_audio_enabled$();
   }
+
+  toggleAudio() {
+    this.agoraLibService.toggleAudio();
+  }
+
+  goto_prep() {
+    this.router.navigate(['/livevideo/prep/']);
+  }
+
 
 }
