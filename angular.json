@@ -427,6 +427,134 @@
           }
         }
       }
+    },
+    "sample3": {
+      "root": "projects/sample3/",
+      "sourceRoot": "projects/sample3/src",
+      "projectType": "application",
+      "prefix": "app",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/sample3",
+            "index": "projects/sample3/src/index.html",
+            "main": "projects/sample3/src/main.ts",
+            "polyfills": "projects/sample3/src/polyfills.ts",
+            "tsConfig": "projects/sample3/tsconfig.app.json",
+            "assets": [
+              "projects/sample3/src/favicon.ico",
+              "projects/sample3/src/assets"
+            ],
+            "styles": [
+              "projects/sample3/src/styles.css"
+            ],
+            "scripts": [],
+            "es5BrowserSupport": true
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/sample3/src/environments/environment.ts",
+                  "with": "projects/sample3/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "sample3:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "sample3:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "sample3:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/sample3/src/test.ts",
+            "polyfills": "projects/sample3/src/polyfills.ts",
+            "tsConfig": "projects/sample3/tsconfig.spec.json",
+            "karmaConfig": "projects/sample3/karma.conf.js",
+            "styles": [
+              "projects/sample3/src/styles.css"
+            ],
+            "scripts": [],
+            "assets": [
+              "projects/sample3/src/favicon.ico",
+              "projects/sample3/src/assets"
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/sample3/tsconfig.app.json",
+              "projects/sample3/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "sample3-e2e": {
+      "root": "projects/sample3-e2e/",
+      "projectType": "application",
+      "prefix": "",
+      "architect": {
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "projects/sample3-e2e/protractor.conf.js",
+            "devServerTarget": "sample3:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "sample3:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": "projects/sample3-e2e/tsconfig.e2e.json",
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "agora-test"
