@@ -71,7 +71,7 @@ export class AgoraLibComponent implements OnInit, OnDestroy {
     });
 
     this.agoraService.client.on('stream-added', (evt) => {
-      console.log('stream-added')
+      console.log('stream-added');
       const stream = evt.stream;
       this.agoraService.client.subscribe(stream, (err) => {
         console.log('Subscribe stream failed', err);

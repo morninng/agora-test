@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Router } from '@angular/router';
+import { UserAuthService } from '../services/user-auth.service';
+
+import { AgoraLibraryService } from 'agora-three';
+
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-before-enter',
@@ -10,14 +15,23 @@ import { Router } from '@angular/router';
 export class BeforeEnterComponent implements OnInit {
 
   constructor(
+    private userAuthService: UserAuthService,
     private router: Router,
+    private agoraLibraryService: AgoraLibraryService
   ) { }
 
   ngOnInit() {
   }
 
   join() {
-    this.router.navigate(['/livevideo/game/']);
+    const own_userid = this.userAuthService.get_ownid();
+    this.agoraLibraryService.before_enter(own_userid);
+    this.agoraLibraryService.before_enter_done$()
+      .pipe(
+        take(1)
+      ).subscribe( () => {
+        this.router.navigate(['/livevideo/game/']);
+      });
   }
 
 }

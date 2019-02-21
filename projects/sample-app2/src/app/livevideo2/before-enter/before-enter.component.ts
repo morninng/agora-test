@@ -19,6 +19,7 @@ export class BeforeEnterComponent implements OnInit {
     ) { }
 
 
+    
   ngOnInit() {
     const own_userid = this.userAuthService.get_ownid();
     this.agoraLibService.before_enter(own_userid);
