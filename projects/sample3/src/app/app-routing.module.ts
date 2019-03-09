@@ -8,7 +8,7 @@ const routes: Routes = [
   },
   {
     path: 'broadcast',
-    loadChildren: '/broadcast-test/broadcast-test.module#BroadcastTestModule'
+    loadChildren: './broadcast-test/broadcast-test.module#BroadcastTestModule'
   }
 ];
 
