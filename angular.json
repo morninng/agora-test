@@ -590,6 +590,41 @@
           }
         }
       }
+    },
+    "agora-broadcast": {
+      "root": "projects/agora-broadcast",
+      "sourceRoot": "projects/agora-broadcast/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/agora-broadcast/tsconfig.lib.json",
+            "project": "projects/agora-broadcast/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/agora-broadcast/src/test.ts",
+            "tsConfig": "projects/agora-broadcast/tsconfig.spec.json",
+            "karmaConfig": "projects/agora-broadcast/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/agora-broadcast/tsconfig.lib.json",
+              "projects/agora-broadcast/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "agora-test"

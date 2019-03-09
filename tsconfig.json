@@ -47,6 +47,12 @@
       ],
       "agora-three/*": [
         "dist/agora-three/*"
+      ],
+      "agora-broadcast": [
+        "dist/agora-broadcast"
+      ],
+      "agora-broadcast/*": [
+        "dist/agora-broadcast/*"
       ]
     }
   }
