@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
+
+import { AgoraBroadcastService } from 'agora-broadcast';
+
 @Component({
   selector: 'app-before-enter',
   templateUrl: './before-enter.component.html',

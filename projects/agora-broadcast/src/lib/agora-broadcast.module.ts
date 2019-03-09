@@ -1,10 +1,13 @@
 import { NgModule } from '@angular/core';
-import { AgoraBroadcastComponent } from './agora-broadcast.component';
+import { AgoraBroadcastComponent } from './components/agora-broadcast.component';
+
+import { AgoraBroadcastService } from './services/agora-broadcast.service';
 
 @NgModule({
   declarations: [AgoraBroadcastComponent],
   imports: [
   ],
-  exports: [AgoraBroadcastComponent]
+  exports: [AgoraBroadcastComponent],
+  providers: [ AgoraBroadcastService ]
 })
 export class AgoraBroadcastModule { }
