@@ -2,6 +2,5 @@
  * Public API Surface of agora-broadcast
  */
 
-export * from './lib/agora-broadcast.service';
-export * from './lib/agora-broadcast.component';
-export * from './lib/agora-broadcast.module';
+export {  AgoraBroadcastService } from './lib/services/agora-broadcast.service';
+export { AgoraBroadcastModule } from './lib/agora-broadcast.module';
