@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 
+import { CommonModule } from '@angular/common';
 import { AngularAgoraRtcModule } from 'angular-agora-rtc';
 
 import { AgoraBroadcastService } from './services/agora-broadcast.service';
@@ -8,7 +9,7 @@ import { AgoraBroadcastStreamPlayComponent } from './components/agora-broadcast-
 @NgModule({
   declarations: [AgoraBroadcastStreamPlayComponent],
   imports: [
-    AngularAgoraRtcModule,
+    AngularAgoraRtcModule, CommonModule,
   ],
   exports: [ AgoraBroadcastStreamPlayComponent ],
   providers: [ AgoraBroadcastService ]

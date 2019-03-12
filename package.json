@@ -20,7 +20,7 @@
     "@angular/platform-browser": "^7.2.5",
     "@angular/platform-browser-dynamic": "^7.2.5",
     "@angular/router": "^7.2.5",
-    "agora-rtc-sdk": "^2.5.0",
+    "agora-rtc-sdk": "^2.5.2",
     "angular-agora-rtc": "^0.1.0",
     "core-js": "^2.5.4",
     "rxjs": "~6.4.0",

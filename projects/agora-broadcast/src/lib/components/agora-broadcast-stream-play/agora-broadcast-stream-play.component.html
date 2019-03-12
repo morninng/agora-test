@@ -1,3 +1,28 @@
 <p>
   agora-broadcast-stream-play works!
 </p>
+
+<button (click)="become_host()">become_host </button>
+<button (click)="become_audience()">become_audience </button>
+
+<div>
+  <button (click)="publish()"> publish </button>
+  <button (click)="unpublish()"> unpublish </button>
+  <br><br>
+</div>
+
+<div>
+  <button (click)="join()">join </button>
+  <button (click)="create_stream()">create_stream </button>
+  <button (click)="initialize()">initialize </button>
+  <br><br>
+</div>
+
+<ng-container *ngFor="let stream_id of stream_id_arr">
+  <!-- <div id="stream_id">{{stream_id}}</div> -->
+  <div id={{stream_id}} style="width:320px;height:240px;"> {{stream_id}} </div>
+</ng-container>
+
+ss
+<div id="local_video" style="width:320px;height:240px;"></div>
+dd
