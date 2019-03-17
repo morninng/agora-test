@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist/sample3",
+    "public": "dist/agora-test",
     "ignore": [
       "firebase.json",
       "**/.*",

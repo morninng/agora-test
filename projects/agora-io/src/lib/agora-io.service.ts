@@ -4,6 +4,8 @@ import * as AgoraRTC from 'agora-rtc-sdk';
 import { BehaviorSubject, Observable, ReplaySubject, combineLatest } from 'rxjs';
 import { map, filter, take } from 'rxjs/operators';
 
+import { is_ios } from './function/util';
+
 type AgoraClientCodec = 'vp8' | 'h264';
 type AgoraClientMode = 'live' | 'rtc';
 
@@ -180,10 +182,10 @@ export class AgoraIoService {
 
     // https://docs.agora.io/en/Voice/API%20Reference/web/interfaces/agorartc.clientconfig.html
 
-    const codec: AgoraClientCodec = 'h264';
-    const mode: AgoraClientMode = 'rtc';
+    // const codec: AgoraClientCodec = 'h264';
+    const mode: AgoraClientMode = 'live';
 
-    this._client = AgoraRTC.createClient({mode, codec});
+    this._client = AgoraRTC.createClient({mode});
 
     this._client.on('stream-published', (evt) => {
       console.log('---on-stream-published');
@@ -365,8 +367,8 @@ export class AgoraIoService {
 
 
 
-  subscribeStream(stream){
-    this._client.subscribe(stream, (err) => {
+  subscribeStream(stream) {
+    this._client.subscribe(stream, {video: false, audio: true}, (err) => {
       console.log('----Subscribe stream failed', err);
     });
   }
@@ -453,6 +455,7 @@ export class AgoraIoService {
 
   create_stream = (own_uid) => {
 
+    console.log('create_stream');
     let own_stream_id = '';
     if (own_uid) {
       own_stream_id = own_uid + '_s';
@@ -460,26 +463,52 @@ export class AgoraIoService {
       alert('no own uid');
     }
 
+    let constraint: boolean | {} = {
+      video: { width: { ideal: 1 }, height: { ideal: 1 }, frameRate: { ideal: 1 }},
+      audio: true };
+    console.log('not ios', constraint);
+
+    if (is_ios()) {
+      constraint =  {
+        video: true,
+        audio: true
+      }
+      console.log('ios', constraint);
+    }
+
     // https://docs.agora.io/en/Voice/API%20Reference/web/interfaces/agorartc.streamspec.html
 
-    console.log('----this.own_stream_id', own_stream_id);
-    this._localStream = AgoraRTC.createStream({
-      streamID: own_stream_id,
-      audio: true,
-      video: false,
-      screen: false}
-    );
+    navigator.mediaDevices.getUserMedia( {
+      video: { width: { ideal: 40 }, height: { ideal: 30 }, frameRate: { ideal: 1 }},
+      audio: true } 
+    ).then((mediaStream) => {
+        const videoSource = mediaStream.getVideoTracks()[0];
+        const audioSource = mediaStream.getAudioTracks()[0];
+        this._localStream = AgoraRTC.createStream({
+          streamID: own_stream_id,
+            videoSource: videoSource,
+            audioSource: audioSource,
+            audio: true,
+            video: true,
+        });
 
-    this._localStream.init(
-      () => {
-        this.is_localstream_created_subject$.next(true);
-        console.log('----getUserMedia successfully');
-      },
-      (err) => {
-        this.is_localstream_created_subject$.next(false);
-        console.log('----getUserMedia failed', err);
-      }
-    );
+      this._localStream.init(
+        () => {
+          this.is_localstream_created_subject$.next(true);
+          console.log('---- get User Media successfully');
+          // this._localStream.play('localstream');
+          // this._localStream.disableVideo();
+          // this._localStream.disableVideo();
+        },
+        (err) => {
+          this.is_localstream_created_subject$.next(false);
+          console.log('----getUserMedia failed', err);
+          alert(`----getUserMedia failed ${JSON.stringify(err)}`);
+        }
+      );
+    }).catch((err)=>{
+      console.log(`get usermedia failed ${JSON.stringify(err)}`);
+    });
   }
 
   delete_stream() {
